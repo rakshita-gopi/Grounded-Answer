@@ -24,6 +24,10 @@ AI assisted definition of Stage A domain objects: Policy, PolicyClause, Question
 
 AI assisted a structure-aware policy parser (Part / Section / Clause), an ingestion service that maps parsed clauses onto domain objects, and unit tests for document loading, clause detection, clause IDs, and text preservation.
 
+## Phase 5
+
+AI assisted the retrieval port (`Retriever`), retrieval query model, and `RetrievalService`. No PageIndex adapter or local fallback was added.
+
 ## Human verification
 
 Repository layout and file contents should be reviewed before each commit.
