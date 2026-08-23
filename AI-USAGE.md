@@ -64,6 +64,10 @@ AI assisted Stage A integration tests for the question → retrieval → evidenc
 
 AI assisted the original evaluation dataset (`evaluation/original/questions.json` and `expected.json`) with direct, multi-condition, cross-reference, exact-clause, and unsupported questions. Expected facts were taken from the supplied policy manual. The evaluation runner was not added.
 
+## Phase 15
+
+AI assisted `scripts/evaluate.py`, which runs the original dataset and prints measured answer, evidence, citation, and abstention scores.
+
 ## Human verification
 
 Repository layout and file contents should be reviewed before each commit.
