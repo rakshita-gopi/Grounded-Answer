@@ -1,0 +1,4 @@
+# Compose file will define runnable services once the application exists.
+# `docker compose up` is not yet a supported workflow.
+
+services: {}
