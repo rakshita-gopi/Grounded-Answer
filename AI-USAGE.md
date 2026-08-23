@@ -28,6 +28,10 @@ AI assisted a structure-aware policy parser (Part / Section / Clause), an ingest
 
 AI assisted the retrieval port (`Retriever`), retrieval query model, and `RetrievalService`. No PageIndex adapter or local fallback was added.
 
+## Phase 6
+
+AI assisted a PageIndex adapter behind the existing `Retriever` port, a factory that selects PageIndex only when credentials are present, and a deterministic structure-aware local fallback used for tests and runs without external services.
+
 ## Human verification
 
 Repository layout and file contents should be reviewed before each commit.

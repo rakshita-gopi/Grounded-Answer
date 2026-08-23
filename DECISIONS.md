@@ -7,3 +7,7 @@ The hackathon allows a CLI/notebook submission and does not require a frontend. 
 ## Decision 002 — Retrieval abstraction
 
 Application code retrieves evidence through a `Retriever` interface (`retrieve(query) -> evidence`). This keeps the rest of the system independent of any specific retrieval library or vendor.
+
+## Decision 003 — PageIndex
+
+PageIndex is the intended structure-aware retrieval backend. Its SDK and credentials stay inside `PageIndexRetriever`. When PageIndex cannot run (missing package or API key), a deterministic Part/Section/Clause retriever is used so tests and local execution stay reproducible.
