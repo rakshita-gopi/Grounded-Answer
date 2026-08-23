@@ -99,4 +99,8 @@ def create_llm_provider(environ: Mapping[str, str] | None = None) -> LLMProvider
             model=config.model,
             base_url=config.base_url,
         )
+    if config.provider == "ollama":
+        from grounded_answer.llm.ollama import OllamaLLMProvider
+
+        return OllamaLLMProvider.from_environ(environ if environ is not None else os.environ)
     raise LLMUnavailableError(f"Unknown LLM_PROVIDER: {config.provider!r}")

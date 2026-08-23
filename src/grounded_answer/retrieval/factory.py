@@ -1,4 +1,4 @@
-"""Choose a Retriever implementation without exposing PageIndex to callers."""
+"""Choose a Retriever implementation without exposing PageIndex or Ollama to callers."""
 
 from __future__ import annotations
 
@@ -6,11 +6,15 @@ import os
 from collections.abc import Mapping
 from pathlib import Path
 
+from grounded_answer.embeddings.config import embeddings_requested
+from grounded_answer.embeddings.index import ensure_index
+from grounded_answer.embeddings.ollama import OllamaEmbeddingProvider
 from grounded_answer.ingestion.models import ParsedDocument
 from grounded_answer.ingestion.parser import load_policy_text, parse_policy_manual
 from grounded_answer.ingestion.service import DEFAULT_CORPUS_DIR
 from grounded_answer.retrieval.base import Retriever
 from grounded_answer.retrieval.composite import CompositeRetriever
+from grounded_answer.retrieval.embedding_retriever import EmbeddingRetriever
 from grounded_answer.retrieval.local_fallback import DeterministicStructureRetriever
 from grounded_answer.retrieval.pageindex_adapter import (
     PageIndexUnavailableError,
@@ -19,6 +23,7 @@ from grounded_answer.retrieval.pageindex_adapter import (
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_ENV_PATH = REPO_ROOT / ".env"
+DEFAULT_INDEX_DIR = REPO_ROOT / "data" / "index"
 
 
 def create_retriever(
@@ -28,11 +33,10 @@ def create_retriever(
     load_dotenv: bool = False,
     amendment_document: ParsedDocument | None = None,
 ) -> Retriever:
-    """Return a PageIndex retriever when configured, otherwise the local fallback.
+    """Return PageIndex, Ollama embeddings, or the lexical fallback.
 
-    `load_dotenv` is off by default so tests and callers control configuration
-    explicitly. The CLI can turn it on later. An optional amendment document is
-    searched through the same Retriever port, not through PageIndex internals.
+    `load_dotenv` is off by default so tests control configuration explicitly.
+    Ollama types stay inside the embedding adapter.
     """
     env = dict(environ) if environ is not None else dict(os.environ)
     if load_dotenv:
@@ -46,22 +50,41 @@ def create_retriever(
             policy_retriever = build_pageindex_retriever(api_key=api_key, doc_id=doc_id)
         except PageIndexUnavailableError:
             policy_retriever = None
+
+    policy_document = _load_policy_document(corpus_dir)
     if policy_retriever is None:
-        policy_retriever = _local_policy_retriever(corpus_dir)
+        policy_retriever = _local_or_embedding_retriever(policy_document, env, "policy.json")
 
     if amendment_document is None:
         return policy_retriever
-    amendment_retriever = DeterministicStructureRetriever(amendment_document)
+    amendment_retriever = _local_or_embedding_retriever(
+        amendment_document, env, "amendment.json"
+    )
     return CompositeRetriever(policy_retriever, amendment_retriever)
 
 
-def _local_policy_retriever(corpus_dir: Path | None) -> Retriever:
+def _local_or_embedding_retriever(
+    document: ParsedDocument,
+    env: Mapping[str, str],
+    filename: str,
+) -> Retriever:
+    if not embeddings_requested(env):
+        return DeterministicStructureRetriever(document)
+    provider = OllamaEmbeddingProvider.from_environ(env)
+    provider.ping()
+    index_dir = Path(env.get("INDEX_DIR", "").strip() or DEFAULT_INDEX_DIR) / filename.replace(
+        ".json", ""
+    )
+    index = ensure_index((document,), provider, index_dir)
+    return EmbeddingRetriever(index, provider)
+
+
+def _load_policy_document(corpus_dir: Path | None) -> ParsedDocument:
     source_path = (corpus_dir or DEFAULT_CORPUS_DIR) / "policy-manual.md"
-    document = parse_policy_manual(
+    return parse_policy_manual(
         load_policy_text(source_path),
         source_document=source_path.name,
     )
-    return DeterministicStructureRetriever(document)
 
 
 def _read_env_file(path: Path) -> dict[str, str]:

@@ -46,7 +46,10 @@ def test_parser_accepts_ask_command() -> None:
     assert args.determination_date is None
 
 
-def test_parser_accepts_determination_date() -> None:
+def test_parser_accepts_verify_command() -> None:
+    args = build_parser().parse_args(["verify"])
+    assert args.command == "verify"
+
     args = build_parser().parse_args(
         ["ask", "What is the earnings disregard?", "--determination-date", "2026-03-15"]
     )

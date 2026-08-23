@@ -1,6 +1,7 @@
 from grounded_answer.domain.evidence import Evidence
 from grounded_answer.llm.base import LLMContext
 from grounded_answer.llm.prompts import GROUNDING_INSTRUCTIONS, build_generation_prompt
+from grounded_answer.llm.ollama import DEFAULT_OLLAMA_LLM_MODEL, OllamaLLMProvider
 from grounded_answer.llm.provider import (
     LLMUnavailableError,
     StubLLMProvider,
@@ -31,6 +32,12 @@ def test_prompt_includes_question_evidence_and_grounding_rules() -> None:
     assert "Preserve qualifications and exceptions." in prompt
     assert "Cite the relevant clause" in prompt
     assert "If evidence is insufficient, explicitly say so." in prompt
+    assert "Do not use outside knowledge or world facts." in prompt
+    assert "Preserve exact policy numbers" in prompt
+    assert "concise direct answer" in prompt
+    assert "already been retrieved and resolved" in prompt
+    assert "Output only the final plain-English answer" in prompt
+    assert "The user is asking" in prompt
 
 
 def test_stub_provider_receives_prompt_and_context() -> None:
@@ -76,3 +83,25 @@ def test_factory_rejects_unknown_provider() -> None:
     except LLMUnavailableError:
         raised = True
     assert raised
+
+
+def test_factory_selects_ollama_and_ignores_embedding_model() -> None:
+    provider = create_llm_provider(
+        environ={
+            "LLM_PROVIDER": "ollama",
+            "LLM_MODEL": "qwen3:4b",
+            "OLLAMA_BASE_URL": "http://ollama:11434",
+            "OLLAMA_EMBEDDING_MODEL": "qwen3-embedding:4b",
+        }
+    )
+    assert isinstance(provider, OllamaLLMProvider)
+    assert provider.model_name == "qwen3:4b"
+    assert provider.model_name != "qwen3-embedding:4b"
+
+
+def test_factory_defaults_ollama_chat_model() -> None:
+    provider = create_llm_provider(
+        environ={"LLM_PROVIDER": "ollama", "OLLAMA_BASE_URL": "http://ollama:11434"}
+    )
+    assert isinstance(provider, OllamaLLMProvider)
+    assert provider.model_name == DEFAULT_OLLAMA_LLM_MODEL

@@ -1,15 +1,19 @@
 from collections.abc import Sequence
+from pathlib import Path
 
+from grounded_answer.amendments.service import AmendmentIngestionService
 from grounded_answer.application.answer_service import INSUFFICIENT_ANSWER, AnswerService
 from grounded_answer.application.query_service import QueryService
 from grounded_answer.domain.answer import GroundingStatus
 from grounded_answer.domain.clause import PolicyClause
 from grounded_answer.domain.question import Question
 from grounded_answer.evidence.assembler import EvidenceAssembler
+from grounded_answer.ingestion.service import IngestionService
 from grounded_answer.llm.provider import StubLLMProvider
 from grounded_answer.retrieval.base import Retriever
 from grounded_answer.retrieval.models import RetrievalHit, RetrievalQuery
 from grounded_answer.retrieval.service import RetrievalService
+from grounded_answer.temporal.resolver import PolicyApplicabilityResolver
 
 
 def _clause(clause_id: str, content: str | None = None) -> PolicyClause:
@@ -57,7 +61,7 @@ def test_query_service_returns_evidence_without_using_pageindex() -> None:
 
 
 def test_answer_service_generates_from_evidence() -> None:
-    llm = StubLLMProvider(text="Eligibility requires the conditions in §2.1.2.")
+    llm = StubLLMProvider(text="should not be used")
     eligibility = RetrievalHit(
         text="The conditions of eligibility are listed in this clause.",
         source="policy-manual.md",
@@ -80,15 +84,14 @@ def test_answer_service_generates_from_evidence() -> None:
     result = service.answer(Question(text="What are the eligibility requirements?"))
 
     assert result.grounding_status == GroundingStatus.SUPPORTED
-    assert result.text == "Eligibility requires the conditions in §2.1.2."
+    assert "Part 2 of the policy" in result.text
+    assert "Okay" not in result.text
+    assert "The user is asking" not in result.text
+    assert "[§2.1.2]" in result.text
+    assert "§99.9.9" not in result.text
     assert [citation.clause_id for citation in result.citations] == ["§2.1.2"]
     assert result.citations[0].source_document == "policy-manual.md"
-    assert llm.calls
-    prompt, context = llm.calls[0]
-    assert "What are the eligibility requirements?" in prompt
-    assert "§2.1.2" in prompt
-    assert context.evidence[0].clause_id == "§2.1.2"
-    assert all(item.clause_id != "§2.4.1" for item in context.evidence)
+    assert llm.calls == []
 
 
 def test_answer_service_abstains_when_evidence_is_missing() -> None:
@@ -127,8 +130,77 @@ def test_answer_service_abstains_when_llm_cites_only_invented_clauses() -> None:
         ),
     )
     service = AnswerService(QueryService(retrieval), llm)
-    result = service.answer(Question(text="What are the eligibility requirements?"))
+    result = service.answer(Question(text="What does this clause list?"))
 
+    assert result.grounding_status == GroundingStatus.INSUFFICIENT
+    assert result.text == INSUFFICIENT_ANSWER
+    assert result.citations == ()
+    assert "§99.9.9" not in result.text
+    assert llm.calls
+
+
+def test_answer_service_strips_reasoning_and_cites_only_supporting_clauses() -> None:
+    llm = StubLLMProvider(
+        text=(
+            "Okay, let me tackle this. The user is asking about listed conditions. "
+            "The clause lists the conditions of eligibility."
+        )
+    )
+    eligibility = RetrievalHit(
+        text="The conditions of eligibility are listed in this clause.",
+        source="policy-manual.md",
+        clause_id="§2.1.2",
+    )
+    resources = RetrievalHit(
+        text="Countable resources must not exceed $4,000.",
+        source="policy-manual.md",
+        clause_id="§2.4.1",
+    )
+    retrieval = RetrievalService(
+        FakeRetriever((eligibility, resources)),
+        EvidenceAssembler(
+            [
+                _clause("§2.1.2", "The conditions of eligibility are listed in this clause."),
+                _clause("§2.4.1", "Countable resources must not exceed $4,000."),
+            ]
+        ),
+    )
+    service = AnswerService(QueryService(retrieval), llm)
+    result = service.answer(Question(text="What does this clause list?"))
+
+    assert result.grounding_status == GroundingStatus.SUPPORTED
+    assert "Okay" not in result.text
+    assert "The user is asking" not in result.text
+    assert "lists the conditions of eligibility" in result.text
+    assert "[§2.1.2]" in result.text
+    assert "[§2.4.1]" not in result.text
+    assert llm.calls
+
+
+def test_off_topic_does_not_use_missing_date_when_amended_clauses_are_retrieved(
+    corpus_dir: Path,
+) -> None:
+    policy = IngestionService(corpus_dir).load_policy()
+    amendment = AmendmentIngestionService().load_amendment()
+    hits = (
+        RetrievalHit(
+            text="The first £120 of monthly earnings is disregarded.",
+            source="policy-manual.md",
+            clause_id="§6.4.1",
+        ),
+        RetrievalHit(
+            text="The conditions of eligibility are listed in this clause.",
+            source="policy-manual.md",
+            clause_id="§2.1.2",
+        ),
+    )
+    retrieval = RetrievalService(FakeRetriever(hits), EvidenceAssembler(policy.clauses))
+    service = AnswerService(
+        QueryService(retrieval),
+        StubLLMProvider(text="should not be used"),
+        applicability_resolver=PolicyApplicabilityResolver(policy, amendment),
+    )
+    result = service.answer(Question(text="What is the boiling point of helium?"))
     assert result.grounding_status == GroundingStatus.INSUFFICIENT
     assert result.text == INSUFFICIENT_ANSWER
     assert result.citations == ()

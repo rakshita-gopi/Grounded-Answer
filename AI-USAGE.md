@@ -76,6 +76,10 @@ AI assisted the Stage A V1 checkpoint README (actual runnable setup only). Amend
 
 AI assisted extending Stage A for Amendment No. 2026-01: separate amendment ingestion, temporal context extraction, applicability resolution, effective evidence, CLI date flags, surprise evaluation, and regression tests. The organizer-provided amendment and `docs/READ ME FIRST.md` were not generated or edited. Policy applicability is resolved in application/domain code; the LLM is not asked to choose between conflicting versions. Human verification: pytest (86 passed) and both evaluation datasets were run on this machine. AI did not independently validate the legal meaning of the amendment beyond implementing the text as supplied.
 
+## Ollama embeddings and Docker
+
+AI assisted adding an `EmbeddingProvider` port, an Ollama HTTP adapter for `qwen3-embedding:4b`, a file-backed index with model/dimension metadata, Docker Compose (app + Ollama + model init), and README evaluator instructions. Existing Stage A/B tests continue to use lexical retrieval when `OLLAMA_BASE_URL` is unset. A later change added `OllamaLLMProvider` for `qwen3:4b` chat generation, still behind `LLMProvider`, with the stub retained when `LLM_PROVIDER` is unset. Structured answers are now extracted from effective evidence after grounding so evaluators are not blocked on CPU chat generation for typed policy facts.
+
 ## Human verification
 
 Repository layout and file contents should be reviewed before each commit.

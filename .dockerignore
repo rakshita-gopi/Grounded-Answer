@@ -1,0 +1,22 @@
+.git
+.venv
+venv
+env
+__pycache__
+*.pyc
+.pytest_cache
+.mypy_cache
+.ruff_cache
+.coverage
+htmlcov
+.env
+*.egg-info
+.DS_Store
+Thumbs.db
+data/index
+*.pdf
+policy-manual.md
+GROUNDED ANSWER.pdf
+GROUNDED ANSWER -- Stage B.pdf
+agent-transcripts
+terminals

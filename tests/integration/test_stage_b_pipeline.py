@@ -34,10 +34,10 @@ def test_february_determination_uses_original_disregard(corpus_dir: Path) -> Non
     )
     assert result.grounding_status is GroundingStatus.SUPPORTED
     assert any(citation.clause_id == "§6.4.1" for citation in result.citations)
-    prompt, context = llm.calls[0]
-    evidence_text = " ".join(item.content for item in context.evidence)
-    assert "$120 per month" in evidence_text
-    assert "$175 per month" not in evidence_text
+    assert "$120" in result.text
+    assert "$175" not in result.text
+    assert "[§6.4.1]" in result.text
+    assert llm.calls == []
 
 
 def test_march_determination_uses_amended_disregard(corpus_dir: Path) -> None:
@@ -52,10 +52,10 @@ def test_march_determination_uses_amended_disregard(corpus_dir: Path) -> None:
         Question(text="For a determination made on 15 March 2026, what is the first monthly earnings disregard?")
     )
     assert result.grounding_status is GroundingStatus.SUPPORTED
-    prompt, context = llm.calls[0]
-    evidence_text = " ".join(item.content for item in context.evidence)
-    assert "$175 per month" in evidence_text
-    assert "$120 per month" not in evidence_text
+    assert "$175" in result.text
+    assert "$120" not in result.text
+    assert "[§6.4.1]" in result.text
+    assert llm.calls == []
 
 
 def test_missing_date_does_not_guess(corpus_dir: Path) -> None:
@@ -93,3 +93,5 @@ def test_inserted_clause_available_after_effective_date(corpus_dir: Path) -> Non
     )
     assert result.grounding_status is GroundingStatus.SUPPORTED
     assert any(citation.clause_id == "§10.5.3A" for citation in result.citations)
+    assert "must not be imposed" in result.text
+    assert "[§10.5.3A]" in result.text

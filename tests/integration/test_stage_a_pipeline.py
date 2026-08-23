@@ -21,6 +21,9 @@ def test_eligibility_question_returns_supported_answer_with_real_clauses(
     assert result.grounding_status is GroundingStatus.SUPPORTED
     assert result.citations
     assert result.text
+    assert "Part 2 of the policy" in result.text
+    assert "Okay" not in result.text
+    assert "The user is asking" not in result.text
     for citation in result.citations:
         assert citation.clause_id in known_ids
         assert citation.source_document == "policy-manual.md"
@@ -41,14 +44,9 @@ def test_resource_limit_question_retrieves_clause_2_4_1(corpus_dir: Path) -> Non
     )
 
     assert result.grounding_status is GroundingStatus.SUPPORTED
-    assert any(citation.clause_id == "§2.4.1" for citation in result.citations)
-    assert "$4,000" in result.text or any(
-        citation.clause_id == "§2.4.1" for citation in result.citations
-    )
-    assert llm.calls
-    _prompt, context = llm.calls[0]
-    assert context.evidence
-    assert any(item.clause_id == "§2.4.1" for item in context.evidence)
+    cited = [citation.clause_id for citation in result.citations]
+    assert "§2.4.1" in cited, cited
+    assert "$4,000" in result.text
 
 
 def test_unsupported_question_abstains(corpus_dir: Path) -> None:
@@ -68,7 +66,7 @@ def test_invented_clause_citation_is_rejected(corpus_dir: Path) -> None:
         load_dotenv=False,
         llm=llm,
     )
-    result = service.answer(Question(text="What are the eligibility requirements?"))
+    result = service.answer(Question(text="What does this clause list?"))
 
     assert result.grounding_status is GroundingStatus.INSUFFICIENT
     assert result.citations == ()

@@ -25,7 +25,13 @@ htmlcov/
 .DS_Store
 Thumbs.db
 
-# Source materials kept at workspace root until later phases
+# Generated embedding indexes (rebuilt from the policy + amendment)
+data/index/
+
+# Docker / Ollama local artifacts
+ollama_data/
+
+# Source materials kept at workspace root
 /policy-manual.md
 /GROUNDED ANSWER.pdf
 /GROUNDED ANSWER -- Stage B.pdf
