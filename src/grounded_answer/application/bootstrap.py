@@ -12,6 +12,7 @@ from grounded_answer.citations.validator import CitationValidator
 from grounded_answer.evidence.assembler import EvidenceAssembler
 from grounded_answer.evidence.validator import EvidenceValidator
 from grounded_answer.ingestion.service import DEFAULT_CORPUS_DIR, IngestionService
+from grounded_answer.llm.base import LLMProvider
 from grounded_answer.llm.provider import create_llm_provider
 from grounded_answer.retrieval.factory import create_retriever
 from grounded_answer.retrieval.service import RetrievalService
@@ -25,6 +26,7 @@ def create_answer_service(
     environ: Mapping[str, str] | None = None,
     *,
     load_dotenv: bool = False,
+    llm: LLMProvider | None = None,
 ) -> AnswerService:
     env = dict(environ) if environ is not None else dict(os.environ)
     if load_dotenv:
@@ -41,7 +43,7 @@ def create_answer_service(
     )
     return AnswerService(
         QueryService(retrieval),
-        create_llm_provider(env),
+        llm or create_llm_provider(env),
         citation_validator=CitationValidator(known_clause_ids=known_ids),
     )
 

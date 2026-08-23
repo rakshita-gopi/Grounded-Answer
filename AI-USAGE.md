@@ -56,6 +56,10 @@ AI assisted `CitationValidator`. Generated answers may only cite clause IDs pres
 
 AI assisted the CLI (`python -m grounded_answer ask`) and a bootstrap that wires retrieval, grounding, citation validation, and the LLM behind application services.
 
+## Phase 13
+
+AI assisted Stage A integration tests for the question → retrieval → evidence → answer path, including abstention and rejection of invented clause IDs. Existing unit tests for the parser, evidence assembly, grounding, and citations remain in `tests/unit`.
+
 ## Human verification
 
 Repository layout and file contents should be reviewed before each commit.
