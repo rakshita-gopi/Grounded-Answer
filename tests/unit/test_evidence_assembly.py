@@ -14,7 +14,7 @@ def _clause(clause_id: str, content: str) -> PolicyClause:
     )
 
 
-def test_assembler_maps_pageindex_hit_to_canonical_clause() -> None:
+def test_assembler_maps_hit_to_canonical_clause() -> None:
     full_text = (
         "A household is not eligible where countable income exceeds the applicable "
         "threshold. The thresholds are — $1,180"
@@ -23,7 +23,7 @@ def test_assembler_maps_pageindex_hit_to_canonical_clause() -> None:
     hits = (
         RetrievalHit(
             text="§6.6.1 snippet about income",
-            source="pageindex",
+            source="policy-manual.md",
             node_id="n1",
             title="Income thresholds",
         ),

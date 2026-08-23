@@ -63,7 +63,7 @@ def test_service_forwards_top_k_to_retriever() -> None:
     assert [item.clause_id for item in result] == ["§2.1.2", "§2.4.1"]
 
 
-def test_service_does_not_require_a_pageindex_type() -> None:
+def test_service_accepts_any_retriever() -> None:
     assembler = EvidenceAssembler([_clause("§1.4.1")])
     retriever = FakeRetriever(_sample_hits("§1.4.1"))
     service = RetrievalService(retriever, assembler)

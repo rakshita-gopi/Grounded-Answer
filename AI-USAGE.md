@@ -30,7 +30,7 @@ AI assisted the retrieval port (`Retriever`), retrieval query model, and `Retrie
 
 ## Phase 6
 
-AI assisted a PageIndex adapter behind the existing `Retriever` port, a factory that selects PageIndex only when credentials are present, and a deterministic structure-aware local fallback used for tests and runs without external services.
+AI assisted a deterministic structure-aware local retriever (Part/Section/Clause) behind the existing `Retriever` port, used for tests and runs without Ollama.
 
 ## Phase 7
 
@@ -87,3 +87,7 @@ Repository layout and file contents should be reviewed before each commit.
 ## Known limitations
 
 AI-generated scaffolding must be reviewed. This log records only work that was actually performed.
+
+## PageIndex
+
+The unused PageIndex adapter, optional `pageindex` dependency, and `PAGEINDEX_*` configuration were removed. The project runs on Ollama embeddings or the lexical retriever.

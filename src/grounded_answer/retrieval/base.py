@@ -9,7 +9,7 @@ from grounded_answer.retrieval.models import RetrievalHit, RetrievalQuery
 class Retriever(ABC):
     """Return raw retrieval hits for a query.
 
-    Concrete adapters (PageIndex, local fallback, test doubles) implement this
+    Concrete adapters (Ollama embeddings, lexical fallback, test doubles) implement this
     method. Canonical Evidence is produced by the evidence assembly layer, not
     by the adapter.
     """

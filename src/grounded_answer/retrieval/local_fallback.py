@@ -63,7 +63,7 @@ def _tokens(text: str) -> frozenset[str]:
 
 
 class DeterministicStructureRetriever(Retriever):
-    """Local fallback used when PageIndex cannot run.
+    """Lexical Part/Section/Clause retriever used when Ollama embeddings are unset.
 
     Retrieval walks the ingested Part/Section/Clause tree rather than arbitrary
     chunks. Scoring is deterministic: term overlap, structural title boosts,

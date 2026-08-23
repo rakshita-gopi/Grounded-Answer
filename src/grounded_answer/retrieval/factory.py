@@ -1,4 +1,4 @@
-"""Choose a Retriever implementation without exposing PageIndex or Ollama to callers."""
+"""Choose a Retriever implementation without exposing Ollama to callers."""
 
 from __future__ import annotations
 
@@ -16,10 +16,6 @@ from grounded_answer.retrieval.base import Retriever
 from grounded_answer.retrieval.composite import CompositeRetriever
 from grounded_answer.retrieval.embedding_retriever import EmbeddingRetriever
 from grounded_answer.retrieval.local_fallback import DeterministicStructureRetriever
-from grounded_answer.retrieval.pageindex_adapter import (
-    PageIndexUnavailableError,
-    build_pageindex_retriever,
-)
 
 REPO_ROOT = Path(__file__).resolve().parents[3]
 DEFAULT_ENV_PATH = REPO_ROOT / ".env"
@@ -33,7 +29,7 @@ def create_retriever(
     load_dotenv: bool = False,
     amendment_document: ParsedDocument | None = None,
 ) -> Retriever:
-    """Return PageIndex, Ollama embeddings, or the lexical fallback.
+    """Return Ollama embeddings when configured, otherwise the lexical fallback.
 
     `load_dotenv` is off by default so tests control configuration explicitly.
     Ollama types stay inside the embedding adapter.
@@ -42,18 +38,8 @@ def create_retriever(
     if load_dotenv:
         env = {**_read_env_file(DEFAULT_ENV_PATH), **env}
 
-    api_key = env.get("PAGEINDEX_API_KEY", "").strip()
-    doc_id = env.get("PAGEINDEX_DOC_ID", "").strip()
-    policy_retriever: Retriever | None = None
-    if api_key and doc_id:
-        try:
-            policy_retriever = build_pageindex_retriever(api_key=api_key, doc_id=doc_id)
-        except PageIndexUnavailableError:
-            policy_retriever = None
-
     policy_document = _load_policy_document(corpus_dir)
-    if policy_retriever is None:
-        policy_retriever = _local_or_embedding_retriever(policy_document, env, "policy.json")
+    policy_retriever = _local_or_embedding_retriever(policy_document, env, "policy.json")
 
     if amendment_document is None:
         return policy_retriever

@@ -1,7 +1,6 @@
 """Look up policy evidence for a question.
 
-This service coordinates retrieval. It does not depend on PageIndex or any
-other concrete retriever.
+This service coordinates retrieval. It does not depend on a concrete retriever.
 """
 
 from grounded_answer.domain.evidence import Evidence

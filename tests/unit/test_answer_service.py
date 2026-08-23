@@ -50,7 +50,7 @@ def _answer_service(hits: Sequence[RetrievalHit], llm: StubLLMProvider) -> Answe
     return AnswerService(QueryService(retrieval), llm)
 
 
-def test_query_service_returns_evidence_without_using_pageindex() -> None:
+def test_query_service_returns_evidence_from_injected_retriever() -> None:
     retrieval = RetrievalService(
         FakeRetriever(_hits("§2.1.2")),
         EvidenceAssembler([_clause("§2.1.2")]),

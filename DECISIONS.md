@@ -8,9 +8,9 @@ The hackathon allows a CLI/notebook submission and does not require a frontend. 
 
 Application code retrieves evidence through a `Retriever` interface (`retrieve(query) -> evidence`). This keeps the rest of the system independent of any specific retrieval library or vendor.
 
-## Decision 003 — PageIndex
+## Decision 003 — Local retrieval, no PageIndex
 
-PageIndex is the intended structure-aware retrieval backend. Its SDK and credentials stay inside `PageIndexRetriever`. When PageIndex cannot run (missing package or API key), a deterministic Part/Section/Clause retriever is used so tests and local execution stay reproducible.
+PageIndex was never installed or used. Retrieval is Ollama `qwen3-embedding:4b` when `OLLAMA_BASE_URL` is set, otherwise the deterministic Part/Section/Clause lexical retriever used by tests. There is no PageIndex SDK, API key, or adapter.
 
 ## Decision 004 — Canonical evidence assembly
 
@@ -22,7 +22,7 @@ Answer generation calls `LLMProvider.generate(prompt, context)`. The provider an
 
 ## Decision 006 — Application service coordinates generation
 
-`QueryService` and `AnswerService` orchestrate retrieval and LLM generation. They depend on ports (`Retriever`, `LLMProvider`), not on PageIndex or a specific model vendor.
+`QueryService` and `AnswerService` orchestrate retrieval and LLM generation. They depend on ports (`Retriever`, `LLMProvider`), not on a specific retrieval or model vendor.
 
 ## Decision 007 — Grounding before generation
 
@@ -34,7 +34,7 @@ Citations on an answer must resolve to retrieved evidence and to a real policy c
 
 ## Decision 009 — CLI as the first interface
 
-The first user interface is `python -m grounded_answer ask`. It calls `AnswerService` and does not import PageIndex or a specific LLM vendor.
+The first user interface is `python -m grounded_answer ask`. It calls `AnswerService` and does not import a specific retrieval or LLM vendor.
 
 ## Decision 010 — Stage A V1 checkpoint
 
@@ -64,7 +64,7 @@ Date-dependent resolution is application/domain logic. Missing required dates pr
 
 ## Decision 016 — Ollama Qwen3 Embedding 4B
 
-Local retrieval uses the official Ollama model `qwen3-embedding:4b` through an `EmbeddingProvider` port. The application does not call Ollama from AnswerService or the temporal resolver. The model is configurable (`OLLAMA_EMBEDDING_MODEL`). This avoids an external embedding API, keeps evaluation self-contained, and leaves PageIndex and the lexical fallback in place. Query text is embedded with a policy-retrieval instruction; document chunks are not. No retrieval-quality benchmark was measured for this change.
+Local retrieval uses the official Ollama model `qwen3-embedding:4b` through an `EmbeddingProvider` port. The application does not call Ollama from AnswerService or the temporal resolver. The model is configurable (`OLLAMA_EMBEDDING_MODEL`). This avoids an external embedding API and keeps evaluation self-contained. The lexical fallback remains for tests when `OLLAMA_BASE_URL` is unset. Query text is embedded with a policy-retrieval instruction; document chunks are not. No retrieval-quality benchmark was measured for this change.
 
 ## Decision 017 — Docker Compose evaluation
 

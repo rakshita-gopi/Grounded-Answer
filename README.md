@@ -21,7 +21,7 @@ CLI
   → answer
 ```
 
-The original manual stays unchanged. The amendment is a separate source. Retrieval is behind a `Retriever` port: PageIndex if configured, otherwise Ollama `qwen3-embedding:4b` when `OLLAMA_BASE_URL` is set, otherwise a deterministic lexical fallback used by tests.
+The original manual stays unchanged. The amendment is a separate source. Retrieval is behind a `Retriever` port: Ollama `qwen3-embedding:4b` when `OLLAMA_BASE_URL` is set, otherwise a deterministic lexical fallback used by tests.
 
 ## 3. Requirements (Docker evaluation)
 
@@ -154,4 +154,4 @@ python scripts/evaluate.py
 
 Local Ollama: install Ollama, pull `qwen3-embedding:4b` and `qwen3:4b`, keep `OLLAMA_BASE_URL=http://localhost:11434`, `LLM_PROVIDER=ollama`, and `LLM_MODEL=qwen3:4b` in `.env`.
 
-Leave `PAGEINDEX_API_KEY` empty unless you are using PageIndex. Set `LLM_PROVIDER=stub` (or leave it empty outside Docker) for the stub generator.
+Set `LLM_PROVIDER=stub` (or leave it empty outside Docker) for the stub generator.
