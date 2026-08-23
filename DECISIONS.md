@@ -31,3 +31,7 @@ Answer generation calls `LLMProvider.generate(prompt, context)`. The provider an
 ## Decision 008 — Citation validation
 
 Citations on an answer must resolve to retrieved evidence and to a real policy clause. Invented identifiers such as §99.9.9 are dropped; an answer that cites only invented clauses is rejected.
+
+## Decision 009 — CLI as the first interface
+
+The first user interface is `python -m grounded_answer ask`. It calls `AnswerService` and does not import PageIndex or a specific LLM vendor.

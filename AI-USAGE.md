@@ -52,6 +52,10 @@ AI assisted `GroundingValidator`, which classifies retrieved evidence as SUPPORT
 
 AI assisted `CitationValidator`. Generated answers may only cite clause IDs present in retrieved evidence and, when supplied, the policy corpus. Invented IDs such as §99.9.9 are dropped or cause abstention.
 
+## Phase 12
+
+AI assisted the CLI (`python -m grounded_answer ask`) and a bootstrap that wires retrieval, grounding, citation validation, and the LLM behind application services.
+
 ## Human verification
 
 Repository layout and file contents should be reviewed before each commit.
