@@ -15,3 +15,7 @@ PageIndex is the intended structure-aware retrieval backend. Its SDK and credent
 ## Decision 004 — Canonical evidence assembly
 
 Retrievers return raw hits. `EvidenceAssembler` maps those hits onto ingested policy clauses before any answer is generated, so evidence content comes from the corpus rather than from adapter snippets.
+
+## Decision 005 — LLM provider abstraction
+
+Answer generation calls `LLMProvider.generate(prompt, context)`. The provider and model come from `LLM_PROVIDER` and `LLM_MODEL`, so the application is not hard-coded to one vendor.

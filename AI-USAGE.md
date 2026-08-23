@@ -36,6 +36,10 @@ AI assisted a PageIndex adapter behind the existing `Retriever` port, a factory 
 
 AI assisted the evidence assembly pipeline: raw retrieval hits are converted to canonical `Evidence` objects from ingested clauses, then checked by `EvidenceValidator`. This layer does not generate answers.
 
+## Phase 8
+
+AI assisted the LLM port (`generate(prompt, context)`), grounding prompt construction (question + evidence + instructions), and configuration-selected providers (`stub`, `openai`, `openai-compatible`). No grounded-answer service was added.
+
 ## Human verification
 
 Repository layout and file contents should be reviewed before each commit.
