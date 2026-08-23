@@ -6,11 +6,10 @@ import re
 from collections.abc import Sequence
 from dataclasses import dataclass
 
-from grounded_answer.domain.evidence import Evidence
 from grounded_answer.ingestion.models import ParsedClause, ParsedDocument
 from grounded_answer.retrieval.base import Retriever
 from grounded_answer.retrieval.clause_ids import extract_clause_ids
-from grounded_answer.retrieval.models import RetrievalQuery
+from grounded_answer.retrieval.models import RetrievalHit, RetrievalQuery
 
 _TOKEN_RE = re.compile(r"[a-z0-9]+", re.IGNORECASE)
 _STOPWORDS = frozenset(
@@ -93,7 +92,7 @@ class DeterministicStructureRetriever(Retriever):
                     order += 1
         self._index = tuple(index)
 
-    def retrieve(self, query: RetrievalQuery) -> Sequence[Evidence]:
+    def retrieve(self, query: RetrievalQuery) -> Sequence[RetrievalHit]:
         query_tokens = _tokens(query.text)
         mentioned_ids = set(extract_clause_ids(query.text))
         ranked: list[tuple[int, int, _IndexedClause]] = []
@@ -106,13 +105,14 @@ class DeterministicStructureRetriever(Retriever):
             ranked.append((score, item.order, item))
         ranked.sort(key=lambda row: (-row[0], row[1]))
         selected = ranked[: query.top_k]
-        return tuple(_to_evidence(item.clause) for _, _, item in selected)
+        return tuple(_to_hit(item.clause) for _, _, item in selected)
 
 
-def _to_evidence(clause: ParsedClause) -> Evidence:
-    return Evidence(
-        evidence_id=f"{clause.source_document}:{clause.clause_id}",
-        clause_id=clause.clause_id,
-        content=clause.content,
+def _to_hit(clause: ParsedClause) -> RetrievalHit:
+    return RetrievalHit(
+        text=clause.content,
         source=clause.source_document,
+        node_id=clause.clause_id,
+        title=clause.title,
+        clause_id=clause.clause_id,
     )

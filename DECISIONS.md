@@ -11,3 +11,7 @@ Application code retrieves evidence through a `Retriever` interface (`retrieve(q
 ## Decision 003 — PageIndex
 
 PageIndex is the intended structure-aware retrieval backend. Its SDK and credentials stay inside `PageIndexRetriever`. When PageIndex cannot run (missing package or API key), a deterministic Part/Section/Clause retriever is used so tests and local execution stay reproducible.
+
+## Decision 004 — Canonical evidence assembly
+
+Retrievers return raw hits. `EvidenceAssembler` maps those hits onto ingested policy clauses before any answer is generated, so evidence content comes from the corpus rather than from adapter snippets.

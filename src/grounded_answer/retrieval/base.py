@@ -3,17 +3,17 @@
 from abc import ABC, abstractmethod
 from collections.abc import Sequence
 
-from grounded_answer.domain.evidence import Evidence
-from grounded_answer.retrieval.models import RetrievalQuery
+from grounded_answer.retrieval.models import RetrievalHit, RetrievalQuery
 
 
 class Retriever(ABC):
-    """Return policy evidence for a query.
+    """Return raw retrieval hits for a query.
 
     Concrete adapters (PageIndex, local fallback, test doubles) implement this
-    method. Callers must not depend on adapter internals.
+    method. Canonical Evidence is produced by the evidence assembly layer, not
+    by the adapter.
     """
 
     @abstractmethod
-    def retrieve(self, query: RetrievalQuery) -> Sequence[Evidence]:
+    def retrieve(self, query: RetrievalQuery) -> Sequence[RetrievalHit]:
         raise NotImplementedError

@@ -32,6 +32,10 @@ AI assisted the retrieval port (`Retriever`), retrieval query model, and `Retrie
 
 AI assisted a PageIndex adapter behind the existing `Retriever` port, a factory that selects PageIndex only when credentials are present, and a deterministic structure-aware local fallback used for tests and runs without external services.
 
+## Phase 7
+
+AI assisted the evidence assembly pipeline: raw retrieval hits are converted to canonical `Evidence` objects from ingested clauses, then checked by `EvidenceValidator`. This layer does not generate answers.
+
 ## Human verification
 
 Repository layout and file contents should be reviewed before each commit.

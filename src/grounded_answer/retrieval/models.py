@@ -1,4 +1,4 @@
-"""Retrieval query sent to a Retriever implementation."""
+"""Retrieval query and raw hits returned by a Retriever implementation."""
 
 from dataclasses import dataclass
 
@@ -7,3 +7,14 @@ from dataclasses import dataclass
 class RetrievalQuery:
     text: str
     top_k: int = 8
+
+
+@dataclass(frozen=True, slots=True)
+class RetrievalHit:
+    """Raw retrieval result. Not yet canonical Evidence."""
+
+    text: str
+    source: str
+    node_id: str = ""
+    title: str = ""
+    clause_id: str | None = None

@@ -6,10 +6,8 @@ from collections.abc import Sequence
 from dataclasses import dataclass
 from typing import Any, Protocol
 
-from grounded_answer.domain.evidence import Evidence
 from grounded_answer.retrieval.base import Retriever
-from grounded_answer.retrieval.clause_ids import extract_clause_ids
-from grounded_answer.retrieval.models import RetrievalQuery
+from grounded_answer.retrieval.models import RetrievalHit, RetrievalQuery
 
 
 class PageIndexUnavailableError(RuntimeError):
@@ -29,7 +27,7 @@ class PageIndexGateway(Protocol):
 
 
 class PageIndexRetriever(Retriever):
-    """Maps PageIndex tree nodes onto canonical Evidence objects."""
+    """Return raw PageIndex tree nodes as retrieval hits."""
 
     def __init__(
         self,
@@ -39,19 +37,17 @@ class PageIndexRetriever(Retriever):
         self._gateway = gateway
         self._source_document = source_document
 
-    def retrieve(self, query: RetrievalQuery) -> Sequence[Evidence]:
+    def retrieve(self, query: RetrievalQuery) -> Sequence[RetrievalHit]:
         nodes = self._gateway.retrieve_nodes(query.text, query.top_k)
-        evidence: list[Evidence] = []
-        seen: set[str] = set()
-        for node in nodes:
-            for item in _evidence_from_node(node, self._source_document):
-                if item.evidence_id in seen:
-                    continue
-                seen.add(item.evidence_id)
-                evidence.append(item)
-                if len(evidence) >= query.top_k:
-                    return tuple(evidence)
-        return tuple(evidence)
+        return tuple(
+            RetrievalHit(
+                text=node.text,
+                source=self._source_document,
+                node_id=node.node_id,
+                title=node.title,
+            )
+            for node in nodes
+        )
 
 
 class SdkPageIndexGateway:
@@ -93,31 +89,6 @@ def build_pageindex_retriever(
     return PageIndexRetriever(
         SdkPageIndexGateway(client, doc_id=doc_id),
         source_document=source_document,
-    )
-
-
-def _evidence_from_node(node: PageIndexNode, source_document: str) -> tuple[Evidence, ...]:
-    blob = f"{node.title}\n{node.text}"
-    clause_ids = extract_clause_ids(blob, require_section_sign=True)
-    if not clause_ids:
-        clause_ids = extract_clause_ids(blob, require_section_sign=False)
-    if not clause_ids:
-        return (
-            Evidence(
-                evidence_id=f"{source_document}:node:{node.node_id}",
-                clause_id=node.node_id,
-                content=node.text or node.title,
-                source=source_document,
-            ),
-        )
-    return tuple(
-        Evidence(
-            evidence_id=f"{source_document}:{clause_id}",
-            clause_id=clause_id,
-            content=node.text or node.title,
-            source=source_document,
-        )
-        for clause_id in clause_ids
     )
 
 
