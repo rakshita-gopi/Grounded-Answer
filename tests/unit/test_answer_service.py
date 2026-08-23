@@ -12,11 +12,11 @@ from grounded_answer.retrieval.models import RetrievalHit, RetrievalQuery
 from grounded_answer.retrieval.service import RetrievalService
 
 
-def _clause(clause_id: str) -> PolicyClause:
+def _clause(clause_id: str, content: str | None = None) -> PolicyClause:
     return PolicyClause(
         clause_id=clause_id,
         title=clause_id,
-        content=f"canonical content for {clause_id}",
+        content=content or f"canonical content for {clause_id}",
         source_document="policy-manual.md",
     )
 
@@ -58,23 +58,53 @@ def test_query_service_returns_evidence_without_using_pageindex() -> None:
 
 def test_answer_service_generates_from_evidence() -> None:
     llm = StubLLMProvider(text="Eligibility requires the conditions in §2.1.2.")
-    service = _answer_service(_hits("§2.1.2", "§2.4.1"), llm)
+    eligibility = RetrievalHit(
+        text="The conditions of eligibility are listed in this clause.",
+        source="policy-manual.md",
+        clause_id="§2.1.2",
+    )
+    resources = RetrievalHit(
+        text="Countable resources must not exceed the limit.",
+        source="policy-manual.md",
+        clause_id="§2.4.1",
+    )
+    clauses = [
+        _clause("§2.1.2", "The conditions of eligibility are listed in this clause."),
+        _clause("§2.4.1", "Countable resources must not exceed the limit."),
+    ]
+    retrieval = RetrievalService(
+        FakeRetriever((eligibility, resources)),
+        EvidenceAssembler(clauses),
+    )
+    service = AnswerService(QueryService(retrieval), llm)
     result = service.answer(Question(text="What are the eligibility requirements?"))
 
     assert result.grounding_status == GroundingStatus.SUPPORTED
     assert result.text == "Eligibility requires the conditions in §2.1.2."
-    assert [citation.clause_id for citation in result.citations] == ["§2.1.2", "§2.4.1"]
+    assert [citation.clause_id for citation in result.citations] == ["§2.1.2"]
     assert result.citations[0].source_document == "policy-manual.md"
     assert llm.calls
     prompt, context = llm.calls[0]
     assert "What are the eligibility requirements?" in prompt
     assert "§2.1.2" in prompt
     assert context.evidence[0].clause_id == "§2.1.2"
+    assert all(item.clause_id != "§2.4.1" for item in context.evidence)
 
 
 def test_answer_service_abstains_when_evidence_is_missing() -> None:
     llm = StubLLMProvider(text="should not be used")
     service = _answer_service((), llm)
+    result = service.answer(Question(text="What is the capital of France?"))
+
+    assert result.grounding_status == GroundingStatus.INSUFFICIENT
+    assert result.text == INSUFFICIENT_ANSWER
+    assert result.citations == ()
+    assert llm.calls == []
+
+
+def test_answer_service_abstains_when_retrieved_evidence_is_off_topic() -> None:
+    llm = StubLLMProvider(text="should not be used")
+    service = _answer_service(_hits("§2.1.2"), llm)
     result = service.answer(Question(text="What is the capital of France?"))
 
     assert result.grounding_status == GroundingStatus.INSUFFICIENT

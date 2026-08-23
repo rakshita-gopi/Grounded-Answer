@@ -44,6 +44,10 @@ AI assisted the LLM port (`generate(prompt, context)`), grounding prompt constru
 
 AI assisted `QueryService` and `AnswerService`. The application flow is question → retrieval → evidence → LLM → answer. Empty evidence abstains without calling the LLM. Dedicated grounding and citation validators were not added.
 
+## Phase 10
+
+AI assisted `GroundingValidator`, which classifies retrieved evidence as SUPPORTED or INSUFFICIENT before generation. Off-topic retrieval now abstains. Citation validation was not added.
+
 ## Human verification
 
 Repository layout and file contents should be reviewed before each commit.

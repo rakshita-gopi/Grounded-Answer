@@ -23,3 +23,7 @@ Answer generation calls `LLMProvider.generate(prompt, context)`. The provider an
 ## Decision 006 — Application service coordinates generation
 
 `QueryService` and `AnswerService` orchestrate retrieval and LLM generation. They depend on ports (`Retriever`, `LLMProvider`), not on PageIndex or a specific model vendor.
+
+## Decision 007 — Grounding before generation
+
+`GroundingValidator` decides SUPPORTED or INSUFFICIENT from retrieved evidence before the LLM is called. Off-topic hits are treated as insufficient. There is no PARTIALLY_SUPPORTED status.
