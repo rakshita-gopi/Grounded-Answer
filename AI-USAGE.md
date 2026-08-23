@@ -68,6 +68,10 @@ AI assisted the original evaluation dataset (`evaluation/original/questions.json
 
 AI assisted `scripts/evaluate.py`, which runs the original dataset and prints measured answer, evidence, citation, and abstention scores.
 
+## Phase 16
+
+AI assisted the Stage A V1 checkpoint README (actual runnable setup only). Amendments, temporal reasoning, and MCP were not added.
+
 ## Human verification
 
 Repository layout and file contents should be reviewed before each commit.

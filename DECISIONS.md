@@ -35,3 +35,7 @@ Citations on an answer must resolve to retrieved evidence and to a real policy c
 ## Decision 009 — CLI as the first interface
 
 The first user interface is `python -m grounded_answer ask`. It calls `AnswerService` and does not import PageIndex or a specific LLM vendor.
+
+## Decision 010 — Stage A V1 checkpoint
+
+Stage A is frozen here: original corpus, retrieval, grounding, citations, CLI, tests, and evaluation. Amendments, temporal resolution, and MCP wait until after tag `v1.0-grounded-answer`.
