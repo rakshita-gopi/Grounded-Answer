@@ -6,7 +6,7 @@ Answers must be grounded in the supplied policy corpus, include citations to the
 
 ## Current status
 
-This repository has been initialized. Application code is not implemented yet, and the project is not runnable.
+The original policy corpus is in `data/policy/policy-manual.md`. Application code is not implemented yet, and the project is not runnable.
 
 ## Prerequisites
 

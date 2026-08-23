@@ -12,6 +12,10 @@ Incremental implementation of Grounded Answer according to the project plan.
 
 AI assisted creation of the repository skeleton: README, DECISIONS, AI-USAGE, gitignore, env example, requirements.txt, docker-compose.yml, and empty package/layout directories.
 
+## Phase 2
+
+AI assisted placing the original policy manual at `data/policy/policy-manual.md` without editing its content, and creating `data/policy/manifest.json` from the fields specified for the original corpus.
+
 ## Human verification
 
 Repository layout and file contents should be reviewed before each commit.
