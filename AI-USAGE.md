@@ -20,6 +20,10 @@ AI assisted placing the original policy manual at `data/policy/policy-manual.md`
 
 AI assisted definition of Stage A domain objects: Policy, PolicyClause, Question, Evidence, Citation, Answer, and GroundingStatus. Amendment, versioning, and temporal types were not added.
 
+## Phase 4
+
+AI assisted a structure-aware policy parser (Part / Section / Clause), an ingestion service that maps parsed clauses onto domain objects, and unit tests for document loading, clause detection, clause IDs, and text preservation.
+
 ## Human verification
 
 Repository layout and file contents should be reviewed before each commit.

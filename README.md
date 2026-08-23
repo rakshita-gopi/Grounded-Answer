@@ -6,12 +6,20 @@ Answers must be grounded in the supplied policy corpus, include citations to the
 
 ## Current status
 
-The original policy corpus is in `data/policy/policy-manual.md`. Core domain models live under `src/grounded_answer/domain/`. Application services are not implemented yet, and the project is not runnable.
+The original policy corpus is in `data/policy/policy-manual.md`. Core domain models live under `src/grounded_answer/domain/`. Policy ingestion parses the manual into Parts, Sections, and Clauses (for example `§2.1.2`). Question answering is not implemented yet.
 
 ## Prerequisites
 
-- Python 3.11 or later (to be confirmed when dependencies are added)
+- Python 3.10 or later
 
 ## Installation
 
-Dependencies will be added as features are implemented. See `requirements.txt`.
+```text
+pip install -r requirements.txt
+```
+
+## Running tests
+
+```text
+pytest
+```
