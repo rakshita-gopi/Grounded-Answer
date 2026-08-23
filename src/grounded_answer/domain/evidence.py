@@ -9,3 +9,6 @@ class Evidence:
     clause_id: str
     content: str
     source: str
+    policy_version: str = "original"
+    applicable_period: str | None = None
+    applicability_basis: str | None = None

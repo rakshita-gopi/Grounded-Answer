@@ -24,4 +24,4 @@ class RetrievalService:
         hits = self._retriever.retrieve(query)
         assembled = self._assembler.assemble(hits)
         validated = self._validator.validate(assembled)
-        return validated[:top_k]
+        return validated

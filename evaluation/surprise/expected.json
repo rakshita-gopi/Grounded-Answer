@@ -1,0 +1,86 @@
+{
+  "before-earnings-disregard": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§6.4.1"],
+    "must_contain": ["$120"],
+    "abstain": false
+  },
+  "after-earnings-disregard": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§6.4.1"],
+    "must_contain": ["$175"],
+    "abstain": false
+  },
+  "before-income-threshold": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§6.6.1"],
+    "must_contain": ["$1,180"],
+    "abstain": false
+  },
+  "after-income-threshold": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§6.6.1"],
+    "must_contain": ["$1,225"],
+    "abstain": false
+  },
+  "determination-date-february-claim": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§6.4.1"],
+    "must_contain": ["$175"],
+    "abstain": false
+  },
+  "change-before-effective": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§4.3.2"],
+    "must_contain": ["10 calendar days"],
+    "abstain": false
+  },
+  "change-after-effective": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§4.3.2"],
+    "must_contain": ["14 calendar days"],
+    "abstain": false
+  },
+  "transitional-reporting-later-determination": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§4.3.2"],
+    "must_contain": ["10 calendar days"],
+    "abstain": false
+  },
+  "cross-boundary-earnings": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§6.4.1", "§7.4.3"],
+    "must_contain": ["$120", "$175"],
+    "abstain": false
+  },
+  "after-first-sanction": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§10.5.2"],
+    "must_contain": ["15 per cent"],
+    "abstain": false
+  },
+  "inserted-clause-after": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§10.5.3A"],
+    "must_contain": ["must not be imposed"],
+    "abstain": false
+  },
+  "missing-date-earnings": {
+    "grounding": "INSUFFICIENT",
+    "required_clause_ids": [],
+    "must_contain": [],
+    "abstain": true
+  },
+  "missing-date-reporting": {
+    "grounding": "INSUFFICIENT",
+    "required_clause_ids": [],
+    "must_contain": [],
+    "abstain": true
+  },
+  "unsupported-helium": {
+    "grounding": "INSUFFICIENT",
+    "required_clause_ids": [],
+    "must_contain": [],
+    "abstain": true
+  }
+}

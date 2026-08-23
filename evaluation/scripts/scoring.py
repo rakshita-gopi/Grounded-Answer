@@ -4,8 +4,16 @@ from __future__ import annotations
 
 from collections.abc import Container, Sequence
 
-from grounded_answer.application.answer_service import INSUFFICIENT_ANSWER
+from grounded_answer.application.answer_service import (
+    CONFLICT_ANSWER,
+    INSUFFICIENT_ANSWER,
+    MISSING_DATE_ANSWER,
+)
 from grounded_answer.domain.answer import Answer, GroundingStatus
+
+ABSTAIN_TEXTS = frozenset(
+    {INSUFFICIENT_ANSWER, MISSING_DATE_ANSWER, CONFLICT_ANSWER}
+)
 
 
 def score_answer(
@@ -20,7 +28,7 @@ def score_answer(
 
     abstention_ok = (answer.grounding_status is GroundingStatus.INSUFFICIENT) == expected_abstain
     if expected_abstain:
-        answer_ok = answer.text.strip() == INSUFFICIENT_ANSWER
+        answer_ok = answer.text.strip() in ABSTAIN_TEXTS
         evidence_ok = cited_ids == []
     else:
         answer_ok = all(phrase in answer.text for phrase in must_contain)

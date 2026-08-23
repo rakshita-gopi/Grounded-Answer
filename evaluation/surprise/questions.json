@@ -1,0 +1,79 @@
+{
+  "dataset": "stage-b-surprise",
+  "corpus": [
+    "data/policy/policy-manual.md",
+    "data/amendments/Amendment No. 2026-01.md"
+  ],
+  "questions": [
+    {
+      "id": "before-earnings-disregard",
+      "type": "original-rule-before-amendment",
+      "question": "For a determination made on 15 February 2026, what is the first monthly earnings disregard?"
+    },
+    {
+      "id": "after-earnings-disregard",
+      "type": "new-rule-after-amendment",
+      "question": "For a determination made on 15 March 2026, what is the first monthly earnings disregard?"
+    },
+    {
+      "id": "before-income-threshold",
+      "type": "original-rule-before-amendment",
+      "question": "For a determination made on 20 February 2026, what is the monthly countable income threshold for a household of one person?"
+    },
+    {
+      "id": "after-income-threshold",
+      "type": "new-rule-after-amendment",
+      "question": "For a determination made on 20 March 2026, what is the monthly countable income threshold for a household of one person?"
+    },
+    {
+      "id": "determination-date-february-claim",
+      "type": "determination-date",
+      "question": "A claim period in February 2026 is determined on 15 March 2026. What earnings disregard applies?"
+    },
+    {
+      "id": "change-before-effective",
+      "type": "change-of-circumstances",
+      "question": "The claimant's circumstances changed on 20 February 2026. How many calendar days does the recipient have to report the change?"
+    },
+    {
+      "id": "change-after-effective",
+      "type": "change-of-circumstances",
+      "question": "The claimant's circumstances changed on 5 March 2026. How many calendar days does the recipient have to report the change?"
+    },
+    {
+      "id": "transitional-reporting-later-determination",
+      "type": "transitional",
+      "question": "A change of circumstances occurred on 10 February 2026 and the determination is made on 20 March 2026. What reporting period applies?"
+    },
+    {
+      "id": "cross-boundary-earnings",
+      "type": "cross-boundary",
+      "question": "The claim runs from 20 February 2026 to 10 March 2026. What earnings disregard figures apply, and how is the award treated?"
+    },
+    {
+      "id": "after-first-sanction",
+      "type": "new-rule-after-amendment",
+      "question": "For a determination made on 2 March 2026, what is the reduction for a first sanction?"
+    },
+    {
+      "id": "inserted-clause-after",
+      "type": "new-rule-after-amendment",
+      "question": "For a determination made on 15 March 2026, may a sanction be imposed for a failure to report a change of circumstances that would have increased the award?"
+    },
+    {
+      "id": "missing-date-earnings",
+      "type": "missing-date",
+      "question": "What is the first monthly earnings disregard?"
+    },
+    {
+      "id": "missing-date-reporting",
+      "type": "missing-date",
+      "question": "How many calendar days does a recipient have to report a change of circumstances?"
+    },
+    {
+      "id": "unsupported-helium",
+      "type": "unsupported",
+      "question": "What is the boiling point of helium?"
+    }
+  ]
+}

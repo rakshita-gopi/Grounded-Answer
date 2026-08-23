@@ -43,12 +43,21 @@ def test_parser_accepts_ask_command() -> None:
     args = build_parser().parse_args(["ask", "What are the eligibility requirements?"])
     assert args.command == "ask"
     assert args.question == "What are the eligibility requirements?"
+    assert args.determination_date is None
+
+
+def test_parser_accepts_determination_date() -> None:
+    args = build_parser().parse_args(
+        ["ask", "What is the earnings disregard?", "--determination-date", "2026-03-15"]
+    )
+    assert args.determination_date.isoformat() == "2026-03-15"
+
 
 
 def test_main_prints_insufficient_for_unsupported_question(capsys, monkeypatch) -> None:
     monkeypatch.setattr(
         "grounded_answer.interfaces.cli.main.ask",
-        lambda question, service=None: format_answer(
+        lambda question, service=None, **kwargs: format_answer(
             Answer(
                 text=INSUFFICIENT_ANSWER,
                 citations=(),

@@ -72,6 +72,10 @@ AI assisted `scripts/evaluate.py`, which runs the original dataset and prints me
 
 AI assisted the Stage A V1 checkpoint README (actual runnable setup only). Amendments, temporal reasoning, and MCP were not added.
 
+## Stage B
+
+AI assisted extending Stage A for Amendment No. 2026-01: separate amendment ingestion, temporal context extraction, applicability resolution, effective evidence, CLI date flags, surprise evaluation, and regression tests. The organizer-provided amendment and `docs/READ ME FIRST.md` were not generated or edited. Policy applicability is resolved in application/domain code; the LLM is not asked to choose between conflicting versions. Human verification: pytest (86 passed) and both evaluation datasets were run on this machine. AI did not independently validate the legal meaning of the amendment beyond implementing the text as supplied.
+
 ## Human verification
 
 Repository layout and file contents should be reviewed before each commit.

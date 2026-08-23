@@ -29,7 +29,7 @@ def test_prompt_includes_question_evidence_and_grounding_rules() -> None:
     assert "Use only the supplied evidence." in prompt
     assert "Do not invent policy." in prompt
     assert "Preserve qualifications and exceptions." in prompt
-    assert "Cite the relevant clause." in prompt
+    assert "Cite the relevant clause" in prompt
     assert "If evidence is insufficient, explicitly say so." in prompt
 
 

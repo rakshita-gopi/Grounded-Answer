@@ -39,3 +39,25 @@ The first user interface is `python -m grounded_answer ask`. It calls `AnswerSer
 ## Decision 010 — Stage A V1 checkpoint
 
 Stage A is frozen here: original corpus, retrieval, grounding, citations, CLI, tests, and evaluation. Amendments, temporal resolution, and MCP wait until after tag `v1.0-grounded-answer`.
+
+# Stage B — Surprise Challenge Decisions
+
+## Decision 011 — Amendment as a separate source
+
+The original policy document is immutable. Amendment No. 2026-01 is ingested from `data/amendments/` and never written back into `policy-manual.md`. Query-time resolution chooses which text applies.
+
+## Decision 012 — Temporal policy resolution before generation
+
+Policy applicability is resolved in `PolicyApplicabilityResolver` before the LLM is called. Determination-date rules (amendment paragraphs 1, 3, and 4) are distinct from change-of-circumstances rules (paragraph 2). A claim that spans 1 March 2026 is segmented and apportioned under §7.4.3.
+
+## Decision 013 — Effective evidence
+
+The LLM receives only the clause text that has been determined to apply. It is not given both $120 and $175 as alternatives and asked to pick.
+
+## Decision 014 — Historical preservation
+
+Original values such as `$120 per month` and `20 per cent` remain in the source manual so pre-effective-date questions can still be answered.
+
+## Decision 015 — Deterministic applicability
+
+Date-dependent resolution is application/domain logic. Missing required dates produce a clarification abstention rather than an assumed date. No graph database, extra LLM router, or MCP layer was added; Stage A ports (Retriever, LLMProvider) were reused.

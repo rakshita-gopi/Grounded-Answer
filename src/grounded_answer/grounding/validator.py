@@ -79,6 +79,18 @@ def _clause_supports_question(query_tokens: frozenset[str], item: Evidence) -> b
     return False
 
 
+def overlap_score(question_text: str, content: str) -> int:
+    query_tokens = _tokens(question_text)
+    evidence_tokens = _tokens(content)
+    score = 0
+    for query_token in query_tokens:
+        for evidence_token in evidence_tokens:
+            if _related(query_token, evidence_token):
+                score += 1
+                break
+    return score
+
+
 class GroundingValidator:
     """Decide SUPPORTED vs INSUFFICIENT before the LLM is called.
 

@@ -7,7 +7,7 @@ from collections.abc import Container, Sequence
 
 from grounded_answer.domain.evidence import Evidence
 
-CLAUSE_ID_FORMAT = re.compile(r"^§\d+\.\d+\.\d+$")
+CLAUSE_ID_FORMAT = re.compile(r"^(§\d+\.\d+\.\d+[A-Z]?|¶\d+\.\d+)$")
 
 
 class EvidenceValidator:
