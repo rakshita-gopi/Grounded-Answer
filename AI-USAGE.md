@@ -16,6 +16,10 @@ AI assisted creation of the repository skeleton: README, DECISIONS, AI-USAGE, gi
 
 AI assisted placing the original policy manual at `data/policy/policy-manual.md` without editing its content, and creating `data/policy/manifest.json` from the fields specified for the original corpus.
 
+## Phase 3
+
+AI assisted definition of Stage A domain objects: Policy, PolicyClause, Question, Evidence, Citation, Answer, and GroundingStatus. Amendment, versioning, and temporal types were not added.
+
 ## Human verification
 
 Repository layout and file contents should be reviewed before each commit.

@@ -6,7 +6,7 @@ Answers must be grounded in the supplied policy corpus, include citations to the
 
 ## Current status
 
-The original policy corpus is in `data/policy/policy-manual.md`. Application code is not implemented yet, and the project is not runnable.
+The original policy corpus is in `data/policy/policy-manual.md`. Core domain models live under `src/grounded_answer/domain/`. Application services are not implemented yet, and the project is not runnable.
 
 ## Prerequisites
 
