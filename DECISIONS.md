@@ -19,3 +19,7 @@ Retrievers return raw hits. `EvidenceAssembler` maps those hits onto ingested po
 ## Decision 005 — LLM provider abstraction
 
 Answer generation calls `LLMProvider.generate(prompt, context)`. The provider and model come from `LLM_PROVIDER` and `LLM_MODEL`, so the application is not hard-coded to one vendor.
+
+## Decision 006 — Application service coordinates generation
+
+`QueryService` and `AnswerService` orchestrate retrieval and LLM generation. They depend on ports (`Retriever`, `LLMProvider`), not on PageIndex or a specific model vendor.

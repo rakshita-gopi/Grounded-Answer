@@ -40,6 +40,10 @@ AI assisted the evidence assembly pipeline: raw retrieval hits are converted to 
 
 AI assisted the LLM port (`generate(prompt, context)`), grounding prompt construction (question + evidence + instructions), and configuration-selected providers (`stub`, `openai`, `openai-compatible`). No grounded-answer service was added.
 
+## Phase 9
+
+AI assisted `QueryService` and `AnswerService`. The application flow is question → retrieval → evidence → LLM → answer. Empty evidence abstains without calling the LLM. Dedicated grounding and citation validators were not added.
+
 ## Human verification
 
 Repository layout and file contents should be reviewed before each commit.

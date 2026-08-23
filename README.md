@@ -6,7 +6,7 @@ Answers must be grounded in the supplied policy corpus, include citations to the
 
 ## Current status
 
-The original policy corpus is in `data/policy/policy-manual.md`. Core domain models live under `src/grounded_answer/domain/`. Policy ingestion parses the manual into Parts, Sections, and Clauses (for example `§2.1.2`). Retrieval is accessed through a `Retriever` interface. Raw hits are converted to canonical Evidence by the evidence assembly layer. Text generation goes through an `LLMProvider` interface; provider and model are selected by configuration. Question answering is not wired yet.
+The original policy corpus is in `data/policy/policy-manual.md`. Core domain models live under `src/grounded_answer/domain/`. Policy ingestion parses the manual into Parts, Sections, and Clauses (for example `§2.1.2`). Retrieval is accessed through a `Retriever` interface. Raw hits are converted to canonical Evidence by the evidence assembly layer. `AnswerService` coordinates query, retrieval, and LLM generation. The CLI is not implemented yet.
 
 ## Prerequisites
 
