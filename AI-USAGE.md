@@ -60,6 +60,10 @@ AI assisted the CLI (`python -m grounded_answer ask`) and a bootstrap that wires
 
 AI assisted Stage A integration tests for the question → retrieval → evidence → answer path, including abstention and rejection of invented clause IDs. Existing unit tests for the parser, evidence assembly, grounding, and citations remain in `tests/unit`.
 
+## Phase 14
+
+AI assisted the original evaluation dataset (`evaluation/original/questions.json` and `expected.json`) with direct, multi-condition, cross-reference, exact-clause, and unsupported questions. Expected facts were taken from the supplied policy manual. The evaluation runner was not added.
+
 ## Human verification
 
 Repository layout and file contents should be reviewed before each commit.

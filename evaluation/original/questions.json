@@ -1,0 +1,76 @@
+{
+  "dataset": "stage-a-original",
+  "corpus": "data/policy/policy-manual.md",
+  "questions": [
+    {
+      "id": "direct-resources-limit",
+      "type": "direct",
+      "question": "What is the countable resources limit for a household?"
+    },
+    {
+      "id": "direct-income-threshold-one",
+      "type": "direct",
+      "question": "What is the monthly countable income threshold for a household of one person?"
+    },
+    {
+      "id": "direct-applicant-definition",
+      "type": "direct",
+      "question": "How does the policy manual define an applicant?"
+    },
+    {
+      "id": "multi-eligibility-conditions",
+      "type": "multi-condition",
+      "question": "What conditions must a person satisfy to be eligible for assistance under the Program?"
+    },
+    {
+      "id": "multi-applicants-under-18",
+      "type": "multi-condition",
+      "question": "When may a person aged 16 or 17 be eligible for assistance?"
+    },
+    {
+      "id": "multi-income-disregards",
+      "type": "multi-condition",
+      "question": "Which amounts are disregarded when calculating countable income?"
+    },
+    {
+      "id": "crossref-eligibility-and-resources",
+      "type": "cross-reference",
+      "question": "Section 2.1.2 requires countable resources not exceeding the limit in section 2.4. What is that resources limit?"
+    },
+    {
+      "id": "crossref-change-of-circumstances-overpayment",
+      "type": "cross-reference",
+      "question": "Where an overpayment arose from a change of circumstances that the recipient reported, when shall no overpayment be established for the period before the Department could act?"
+    },
+    {
+      "id": "exact-earnings-disregard-once",
+      "type": "exact-clause",
+      "question": "Does the first 120 dollars per month earnings disregard apply once per household or once per earner?"
+    },
+    {
+      "id": "exact-single-adult-needs",
+      "type": "exact-clause",
+      "question": "What is the monthly needs figure for a single adult?"
+    },
+    {
+      "id": "exact-minimum-award",
+      "type": "exact-clause",
+      "question": "When is no award made after the needs figure is reduced by countable income?"
+    },
+    {
+      "id": "exact-first-sanction",
+      "type": "exact-clause",
+      "question": "What is the reduction and duration of a first sanction?"
+    },
+    {
+      "id": "unsupported-helium",
+      "type": "unsupported",
+      "question": "What is the boiling point of helium?"
+    },
+    {
+      "id": "unsupported-county-population",
+      "type": "unsupported",
+      "question": "What was the population of Calder County in the 2020 census?"
+    }
+  ]
+}

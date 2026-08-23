@@ -1,0 +1,86 @@
+{
+  "direct-resources-limit": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§2.4.1"],
+    "must_contain": ["$4,000"],
+    "abstain": false
+  },
+  "direct-income-threshold-one": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§6.6.1"],
+    "must_contain": ["$1,180"],
+    "abstain": false
+  },
+  "direct-applicant-definition": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§1.4.1"],
+    "must_contain": ["submitted an application"],
+    "abstain": false
+  },
+  "multi-eligibility-conditions": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§2.1.2"],
+    "must_contain": ["resident in Calder County"],
+    "abstain": false
+  },
+  "multi-applicants-under-18": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§2.3.1"],
+    "must_contain": ["16 or 17"],
+    "abstain": false
+  },
+  "multi-income-disregards": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§6.4.1"],
+    "must_contain": ["$120"],
+    "abstain": false
+  },
+  "crossref-eligibility-and-resources": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§2.1.2", "§2.4.1"],
+    "must_contain": ["$4,000"],
+    "abstain": false
+  },
+  "crossref-change-of-circumstances-overpayment": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§9.1.4"],
+    "must_contain": ["30 calendar days"],
+    "abstain": false
+  },
+  "exact-earnings-disregard-once": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§6.4.2"],
+    "must_contain": ["once per household"],
+    "abstain": false
+  },
+  "exact-single-adult-needs": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§7.2.1"],
+    "must_contain": ["$1,240"],
+    "abstain": false
+  },
+  "exact-minimum-award": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§7.1.2"],
+    "must_contain": ["$25"],
+    "abstain": false
+  },
+  "exact-first-sanction": {
+    "grounding": "SUPPORTED",
+    "required_clause_ids": ["§10.5.2"],
+    "must_contain": ["20 per cent"],
+    "abstain": false
+  },
+  "unsupported-helium": {
+    "grounding": "INSUFFICIENT",
+    "required_clause_ids": [],
+    "must_contain": [],
+    "abstain": true
+  },
+  "unsupported-county-population": {
+    "grounding": "INSUFFICIENT",
+    "required_clause_ids": [],
+    "must_contain": [],
+    "abstain": true
+  }
+}
