@@ -48,6 +48,10 @@ AI assisted `QueryService` and `AnswerService`. The application flow is question
 
 AI assisted `GroundingValidator`, which classifies retrieved evidence as SUPPORTED or INSUFFICIENT before generation. Off-topic retrieval now abstains. Citation validation was not added.
 
+## Phase 11
+
+AI assisted `CitationValidator`. Generated answers may only cite clause IDs present in retrieved evidence and, when supplied, the policy corpus. Invented IDs such as §99.9.9 are dropped or cause abstention.
+
 ## Human verification
 
 Repository layout and file contents should be reviewed before each commit.

@@ -27,3 +27,7 @@ Answer generation calls `LLMProvider.generate(prompt, context)`. The provider an
 ## Decision 007 — Grounding before generation
 
 `GroundingValidator` decides SUPPORTED or INSUFFICIENT from retrieved evidence before the LLM is called. Off-topic hits are treated as insufficient. There is no PARTIALLY_SUPPORTED status.
+
+## Decision 008 — Citation validation
+
+Citations on an answer must resolve to retrieved evidence and to a real policy clause. Invented identifiers such as §99.9.9 are dropped; an answer that cites only invented clauses is rejected.

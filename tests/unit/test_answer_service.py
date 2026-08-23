@@ -111,3 +111,24 @@ def test_answer_service_abstains_when_retrieved_evidence_is_off_topic() -> None:
     assert result.text == INSUFFICIENT_ANSWER
     assert result.citations == ()
     assert llm.calls == []
+
+
+def test_answer_service_abstains_when_llm_cites_only_invented_clauses() -> None:
+    llm = StubLLMProvider(text="The secret rule is in §99.9.9.")
+    eligibility = RetrievalHit(
+        text="The conditions of eligibility are listed in this clause.",
+        source="policy-manual.md",
+        clause_id="§2.1.2",
+    )
+    retrieval = RetrievalService(
+        FakeRetriever((eligibility,)),
+        EvidenceAssembler(
+            [_clause("§2.1.2", "The conditions of eligibility are listed in this clause.")]
+        ),
+    )
+    service = AnswerService(QueryService(retrieval), llm)
+    result = service.answer(Question(text="What are the eligibility requirements?"))
+
+    assert result.grounding_status == GroundingStatus.INSUFFICIENT
+    assert result.text == INSUFFICIENT_ANSWER
+    assert result.citations == ()
