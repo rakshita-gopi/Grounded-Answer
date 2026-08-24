@@ -27,23 +27,29 @@ The original manual stays unchanged. The amendment is a separate source. Retriev
 
 - Docker
 - Docker Compose
-- Internet on the first run (to pull images and the embedding model, about 2.5 GB)
+- Internet access on the first run to download Docker images and the required Ollama models. The initial download may be several GB.
 
 You do not need a host Python or Ollama install for this path.
 
 ## 4. Quick start
 
+From the repository root:
+
 ```text
-cd Grounded-Answer
-cp .env.example .env
 docker compose up --build
 ```
 
-Wait until the logs show `System ready` and `Grounded Answer is ready`.
+Wait for the Ollama model initialization and application startup to complete. The `grounded-answer` service should remain running.
+
+Then check readiness:
+
+```text
+docker compose exec grounded-answer python -m grounded_answer verify
+```
 
 ## 5. First run
 
-The first start downloads `qwen3-embedding:4b` and `qwen3:4b` from the official Ollama library (about 2.5 GB each) into a Docker volume. Indexing the policy and amendment then runs once against the embedding model. Typed policy facts (amounts, reporting days) are answered without waiting on the chat model. The chat model is used only when a fact cannot be extracted from the effective evidence.
+The first start downloads the required Ollama embedding and generation models into a Docker volume. The initial setup may take several minutes depending on network speed and machine hardware. Indexing the policy and amendment then runs once against the embedding model. Typed policy facts (amounts, reporting days) are answered without waiting on the chat model. The chat model is used only when a fact cannot be extracted from the effective evidence.
 
 ## 6. Subsequent runs
 
@@ -68,12 +74,6 @@ Optional dates:
 
 ```text
 docker compose exec grounded-answer python -m grounded_answer ask "What is the first monthly earnings disregard?" --determination-date 2026-03-15
-```
-
-Environment check:
-
-```text
-docker compose exec grounded-answer python -m grounded_answer verify
 ```
 
 ## 8. Demonstration questions
@@ -127,7 +127,7 @@ python scripts/evaluate.py --dataset surprise
 ## 10. Troubleshooting
 
 - **Docker is not running:** start Docker Desktop, then `docker compose up --build`.
-- **Model init is slow:** first run pulls `qwen3-embedding:4b` and `qwen3:4b` (~2.5 GB each). Watch `ollama-init-embed` and `ollama-init-llm`.
+- **Model init is slow:** the first run pulls `qwen3-embedding:4b` and `qwen3:4b`. Watch `ollama-init-embed` and `ollama-init-llm`.
 - **Port 11434 in use:** stop a host Ollama process, or change the published port in `docker-compose.yml`.
 - **Stale/incompatible index:** the app refuses to reuse vectors built with a different embedding model. Rebuild with `docker compose down` then `docker compose up --build`, or reset volumes with `docker compose down -v`.
 - **Ollama unavailable:** `ERROR: Ollama is unavailable at http://ollama:11434`. Wait for health, or `docker compose logs ollama`.

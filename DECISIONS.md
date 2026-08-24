@@ -38,7 +38,12 @@ The first user interface is `python -m grounded_answer ask`. It calls `AnswerSer
 
 ## Decision 010 — Stage A V1 checkpoint
 
-Stage A is frozen here: original corpus, retrieval, grounding, citations, CLI, tests, and evaluation. Amendments, temporal resolution, and MCP wait until after tag `v1.0-grounded-answer`.
+Stage A was frozen at this point: original corpus, retrieval,
+grounding, citations, CLI, tests, and evaluation.
+
+Amendments, temporal resolution, and MCP were intentionally deferred
+until after the `v1.0-grounded-answer` checkpoint. Stage B subsequently
+extended this foundation for Amendment No. 2026-01.
 
 # Stage B — Surprise Challenge Decisions
 
