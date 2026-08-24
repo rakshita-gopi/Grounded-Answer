@@ -141,6 +141,7 @@ def build_index(
         f"Embedding {len(clauses)} clauses with {provider.model_name} "
         f"({provider.provider_name})...\n"
     )
+    sys.stderr.flush()
     vectors = provider.embed_documents(texts)
     if len(vectors) != len(clauses):
         raise IndexIncompatibleError("ERROR: Embedding provider returned the wrong number of vectors.")
@@ -172,18 +173,33 @@ def ensure_index(
 ) -> EmbeddingIndex:
     path = index_path(index_dir)
     expected = fingerprints_for(documents)
+    label = ", ".join(document.source_document for document in documents) or str(index_dir)
     if path.exists():
         try:
             loaded = load_index(path)
             loaded.validate(provider)
             if loaded.metadata.source_fingerprints == expected and loaded.items:
+                sys.stderr.write(
+                    f"Using existing retrieval index for {label} "
+                    f"({len(loaded.items)} clauses). Skipping re-embed.\n"
+                )
+                sys.stderr.flush()
                 return loaded
             reason = "source documents changed"
         except (OSError, KeyError, TypeError, ValueError, IndexIncompatibleError) as exc:
             reason = str(exc)
-        sys.stderr.write(f"Rebuilding embedding index ({reason}).\n")
+        sys.stderr.write(f"Rebuilding embedding index for {label} ({reason}).\n")
+        sys.stderr.flush()
+    else:
+        sys.stderr.write(
+            f"Building retrieval index for {label}. "
+            "This runs once and is reused from the index volume.\n"
+        )
+        sys.stderr.flush()
     index = build_index(documents, provider)
     save_index(path, index)
+    sys.stderr.write(f"Retrieval index saved to {path} ({len(index.items)} clauses).\n")
+    sys.stderr.flush()
     return index
 
 

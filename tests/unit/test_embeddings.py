@@ -15,6 +15,7 @@ from grounded_answer.retrieval.models import RetrievalQuery
 class FakeEmbeddingProvider(EmbeddingProvider):
     def __init__(self, model: str = "fake-model") -> None:
         self._model = model
+        self.embed_document_calls = 0
 
     @property
     def provider_name(self) -> str:
@@ -28,6 +29,7 @@ class FakeEmbeddingProvider(EmbeddingProvider):
         return self._vector(text)
 
     def embed_documents(self, texts):
+        self.embed_document_calls += 1
         return [self._vector(text) for text in texts]
 
     def _vector(self, text: str) -> list[float]:
@@ -77,3 +79,16 @@ def test_embedding_retriever_ranks_resource_clause(sample_policy_path: Path) -> 
     )
     assert hits
     assert hits[0].clause_id == "§2.4.1"
+
+
+def test_ensure_index_reuses_compatible_file_without_reembedding(
+    sample_policy_path: Path, tmp_path: Path
+) -> None:
+    document = _sample_document(sample_policy_path)
+    provider = FakeEmbeddingProvider()
+    first = ensure_index((document,), provider, tmp_path)
+    assert provider.embed_document_calls == 1
+    assert first.items
+    second = ensure_index((document,), provider, tmp_path)
+    assert provider.embed_document_calls == 1
+    assert [item.clause_id for item in second.items] == [item.clause_id for item in first.items]
